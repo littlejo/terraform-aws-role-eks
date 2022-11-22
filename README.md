@@ -42,7 +42,7 @@ No modules.
 | <a name="input_permissions_boundary"></a> [permissions\_boundary](#input\_permissions\_boundary) | IAM permissions boundary for IRSA roles | `string` | `""` | no |
 | <a name="input_region"></a> [region](#input\_region) | Region of you eks cluster | `string` | n/a | yes |
 | <a name="input_role_path"></a> [role\_path](#input\_role\_path) | IAM role path for IRSA roles | `string` | `"/"` | no |
-| <a name="input_service_account"></a> [service\_account](#input\_service\_account) | Service account list | <pre>map(object({<br>    name      = string<br>    namespace = string<br>    automount = optional(bool, true)<br>    })<br>  )</pre> | n/a | yes |
+| <a name="input_service_accounts"></a> [service\_accounts](#input\_service\_accounts) | Service accounts map | <pre>map(object({<br>    name      = string<br>    namespace = string<br>    automount = optional(bool, true)<br>    })<br>  )</pre> | n/a | yes |
 
 ## Outputs
 
