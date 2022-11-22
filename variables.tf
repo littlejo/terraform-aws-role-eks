@@ -48,8 +48,8 @@ variable "create_sa" {
   default     = false
 }
 
-variable "service_account" {
-  description = "Service account list"
+variable "service_accounts" {
+  description = "Service accounts map"
   type = map(object({
     name      = string
     namespace = string

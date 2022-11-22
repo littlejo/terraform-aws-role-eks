@@ -2,9 +2,9 @@ locals {
   eks_oidc_issuer_url   = var.oidc_provider != null ? var.oidc_provider : replace(data.aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")
   eks_oidc_provider_arn = "arn:${data.aws_partition.this.partition}:iam::${data.aws_caller_identity.this.account_id}:oidc-provider/${local.eks_oidc_issuer_url}"
 
-  sa_arns         = [for k, sa in var.service_account : "system:serviceaccount:${sa.namespace}:${sa.name}"]
-  sa_str          = join(", ", [for k, sa in var.service_account : "${sa.namespace}/${sa.name}"])
-  service_account = var.create_sa ? var.service_account : {}
+  sa_arns         = [for k, sa in var.service_accounts : "system:serviceaccount:${sa.namespace}:${sa.name}"]
+  sa_str          = join(", ", [for k, sa in var.service_accounts : "${sa.namespace}/${sa.name}"])
+  service_accounts = var.create_sa ? var.service_accounts : {}
 }
 
 data "aws_partition" "this" {}
@@ -52,7 +52,7 @@ resource "aws_iam_role" "this" {
 }
 
 resource "kubernetes_service_account_v1" "this" {
-  for_each = local.service_account
+  for_each = local.service_accounts
   metadata {
     name        = each.value.name
     namespace   = each.value.namespace
