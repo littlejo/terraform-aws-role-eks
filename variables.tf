@@ -43,16 +43,17 @@ variable "oidc_provider" {
 }
 
 variable "create_sa" {
-  description = "Create Service Account ?"
+  description = "Create Service Accounts ?"
   type        = bool
   default     = false
 }
 
 variable "service_account" {
-  description = "Service account"
-  type = object({
+  description = "Service account list"
+  type = map(object({
     name      = string
     namespace = string
     automount = optional(bool, true)
-  })
+    })
+  )
 }

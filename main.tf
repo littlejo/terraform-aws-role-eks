@@ -1,6 +1,10 @@
 locals {
   eks_oidc_issuer_url   = var.oidc_provider != null ? var.oidc_provider : replace(data.aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")
   eks_oidc_provider_arn = "arn:${data.aws_partition.this.partition}:iam::${data.aws_caller_identity.this.account_id}:oidc-provider/${local.eks_oidc_issuer_url}"
+
+  sa_arns         = [for k, sa in var.service_account : "system:serviceaccount:${sa.namespace}:${sa.name}"]
+  sa_str          = join(", ", [for k, sa in var.service_account : "${sa.namespace}/${sa.name}"])
+  service_account = var.create_sa ? var.service_account : {}
 }
 
 data "aws_partition" "this" {}
@@ -24,7 +28,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
     condition {
       test     = "StringLike"
       variable = "${local.eks_oidc_issuer_url}:sub"
-      values   = ["system:serviceaccount:${var.service_account.namespace}:${var.service_account.name}"]
+      values   = local.sa_arns
     }
     condition {
       test     = "StringLike"
@@ -36,7 +40,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 
 resource "aws_iam_role" "this" {
   name                 = var.name
-  description          = "AWS IAM Role for the Kubernetes service account ${var.service_account.name}."
+  description          = "AWS IAM Role for the Kubernetes service accounts: ${local.sa_str}."
   assume_role_policy   = data.aws_iam_policy_document.assume_role_policy.json
   path                 = var.role_path
   permissions_boundary = var.permissions_boundary
@@ -48,11 +52,11 @@ resource "aws_iam_role" "this" {
 }
 
 resource "kubernetes_service_account_v1" "this" {
-  count = var.create_sa ? 1 : 0
+  for_each = local.service_account
   metadata {
-    name        = var.service_account.name
-    namespace   = var.service_account.namespace
+    name        = each.value.name
+    namespace   = each.value.namespace
     annotations = { "eks.amazonaws.com/role-arn" : aws_iam_role.this.arn }
   }
-  automount_service_account_token = var.service_account.automount
+  automount_service_account_token = each.value.automount
 }
