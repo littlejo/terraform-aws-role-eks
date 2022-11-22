@@ -2,8 +2,8 @@ locals {
   eks_oidc_issuer_url   = var.oidc_provider != null ? var.oidc_provider : replace(data.aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")
   eks_oidc_provider_arn = "arn:${data.aws_partition.this.partition}:iam::${data.aws_caller_identity.this.account_id}:oidc-provider/${local.eks_oidc_issuer_url}"
 
-  sa_arns         = [for k, sa in var.service_accounts : "system:serviceaccount:${sa.namespace}:${sa.name}"]
-  sa_str          = join(", ", [for k, sa in var.service_accounts : "${sa.namespace}/${sa.name}"])
+  sa_arns          = [for k, sa in var.service_accounts : "system:serviceaccount:${sa.namespace}:${sa.name}"]
+  sa_str           = join(", ", [for k, sa in var.service_accounts : "${sa.namespace}/${sa.name}"])
   service_accounts = var.create_sa ? var.service_accounts : {}
 }
 
