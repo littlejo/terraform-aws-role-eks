@@ -45,9 +45,12 @@ resource "aws_iam_role" "this" {
   path                 = var.role_path
   permissions_boundary = var.permissions_boundary
 
-  inline_policy {
-    name   = var.inline_policy_name
-    policy = var.inline_policy
+  dynamic "inline_policy" {
+    for_each = var.inline_policies
+    content {
+      name   = inline_policy.key
+      policy = inline_policy.value
+    }
   }
 }
 

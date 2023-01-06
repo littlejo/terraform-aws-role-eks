@@ -11,8 +11,8 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.40.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.16.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.49.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.16.1 |
 
 ## Modules
 
@@ -35,8 +35,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_cluster_id"></a> [cluster\_id](#input\_cluster\_id) | EKS cluster name | `string` | n/a | yes |
 | <a name="input_create_sa"></a> [create\_sa](#input\_create\_sa) | Create Service Accounts ? | `bool` | `false` | no |
-| <a name="input_inline_policy"></a> [inline\_policy](#input\_inline\_policy) | Inline policy (json) for IRSA | `string` | n/a | yes |
-| <a name="input_inline_policy_name"></a> [inline\_policy\_name](#input\_inline\_policy\_name) | Inline policy name for IRSA | `string` | `"policy"` | no |
+| <a name="input_inline_policies"></a> [inline\_policies](#input\_inline\_policies) | Inline policies (json) for IRSA | `map(string)` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | IAM role name for IRSA | `string` | n/a | yes |
 | <a name="input_oidc_provider"></a> [oidc\_provider](#input\_oidc\_provider) | EKS OIDC provider | `string` | `null` | no |
 | <a name="input_permissions_boundary"></a> [permissions\_boundary](#input\_permissions\_boundary) | IAM permissions boundary for IRSA roles | `string` | `""` | no |

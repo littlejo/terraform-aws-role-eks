@@ -3,15 +3,9 @@ variable "name" {
   description = "IAM role name for IRSA"
 }
 
-variable "inline_policy_name" {
-  type        = string
-  description = "Inline policy name for IRSA"
-  default     = "policy"
-}
-
-variable "inline_policy" {
-  type        = string
-  description = "Inline policy (json) for IRSA"
+variable "inline_policies" {
+  type        = map(string)
+  description = "Inline policies (json) for IRSA"
 }
 
 variable "permissions_boundary" {
